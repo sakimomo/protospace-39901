@@ -26,8 +26,14 @@ class PrototypesController < ApplicationController
   end
 
   def edit
-    @prototype = Prototype.find(params[:id])
+    @prototype = Prototype.find_by(id: params[:id])
+  
     unless user_signed_in?
+      redirect_to new_user_session_path
+      return
+    end
+  
+    if @prototype.nil? || current_user.id != @prototype.user_id
       redirect_to root_path
     end
   end
